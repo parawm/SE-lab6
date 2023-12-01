@@ -19,24 +19,33 @@ public class Parser {
     private lexicalAnalyzer lexicalAnalyzer;
     private CodeGenerator cg;
 
+    private ParserInitializer initializer;
+
     public Parser() {
-        parsStack = new Stack<Integer>();
-        parsStack.push(0);
-        try {
-            parseTable = new ParseTable(Files.readAllLines(Paths.get("src/main/resources/parseTable")).get(0));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        rules = new ArrayList<Rule>();
-        try {
-            for (String stringRule : Files.readAllLines(Paths.get("src/main/resources/Rules"))) {
-                rules.add(new Rule(stringRule));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        initializer = new ParserInitializer();
+        parsStack = initializer.initializeParsStack();
+        parseTable = initializer.initializeParseTable();
+        rules = initializer.initializeRules();
         cg = new CodeGenerator();
     }
+//    public Parser() {
+//        parsStack = new Stack<Integer>();
+//        parsStack.push(0);
+//        try {
+//            parseTable = new ParseTable(Files.readAllLines(Paths.get("src/main/resources/parseTable")).get(0));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        rules = new ArrayList<Rule>();
+//        try {
+//            for (String stringRule : Files.readAllLines(Paths.get("src/main/resources/Rules"))) {
+//                rules.add(new Rule(stringRule));
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        cg = new CodeGenerator();
+//    }
 
     public void startParse(java.util.Scanner sc) {
         lexicalAnalyzer = new lexicalAnalyzer(sc);
